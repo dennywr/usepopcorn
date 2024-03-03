@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import StarRating from './components/StarRating';
 import { useState } from 'react';
-import App from './App-v1.jsx';
+import App from './App.jsx';
 import './index.css';
 
 // function Test() {
