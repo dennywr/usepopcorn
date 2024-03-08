@@ -4,6 +4,7 @@ import StarRating from './components/StarRating';
 import { useRef } from 'react';
 import { useMovie } from './useMovies';
 import { useLocalStorageState } from './useLocalStorageState';
+import { useKey } from './useKey';
 
 const tempMovieData = [
   {
@@ -141,19 +142,11 @@ function Logo() {
 function Search({ query, setQuery }) {
   const inputEl = useRef(null);
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === 'Enter') {
-          inputEl.current.focus();
-          setQuery('');
-        }
-      }
-      document.addEventListener('keydown', callback);
-      return () => document.addEventListener('keydown', callback);
-    },
-    [setQuery]
-  );
+  useKey('Enter', function () {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    setQuery('');
+  });
 
   return <input className="search" type="text" placeholder="Search movies..." value={query} onChange={(e) => setQuery(e.target.value)} ref={inputEl} />;
 }
@@ -241,21 +234,7 @@ function MovieDetail({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onCloseMovie();
   }
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === 'Escape') {
-          onCloseMovie();
-          console.log('close');
-        }
-      }
-      document.addEventListener('keydown', callback);
-      return function () {
-        document.removeEventListener('keydown', callback);
-      };
-    },
-    [onCloseMovie]
-  );
+  useKey('Escape', onCloseMovie);
 
   useEffect(
     function () {
